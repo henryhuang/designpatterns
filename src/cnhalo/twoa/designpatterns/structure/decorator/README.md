@@ -1,5 +1,8 @@
+
 # 设计模式之Decorator(油漆工)
-[转自 板桥里人](http://www.jdon.com)
+文章转自 [解道](http://www.jdon.com)
+
+查看 [代码](https://github.com/henryhuang/designpatterns/tree/master/src/cnhalo/twoa/designpatterns/structure/decorator)
 
 装饰模式:Decorator常被翻译成"装饰",我觉得翻译成"油漆工"更形象点,油漆工(decorator)是用来刷油漆的,那么被刷油漆的对象我们称decoratee.这两种实体在Decorator模式中是必须的.
 
@@ -13,19 +16,115 @@
 ### 如何使用?
 举Adapter中的打桩示例,在Adapter中有两种类:方形桩 圆形桩,Adapter模式展示如何综合使用这两个类,在Decorator模式中,我们是要在打桩时增加一些额外功能,比如,挖坑 在桩上钉木板等,不关心如何使用两个不相关的类.
 
-我们先建立一个接口: **Work.java**
+我们先建立一个接口: 
 
-接口Work有一个具体实现:插入方形桩或圆形桩,这两个区别对Decorator是无所谓.我们以插入方形桩为例:**SquarePeg.java**
+```
+/**
+ *
+ *
+ * @author	HuangYijie
+ * @date	2014年8月6日 下午1:42:20
+ * 
+ */
+public interface Work {
+
+	public void insert();
+	
+}
+
+```
+
+接口Work有一个具体实现:插入方形桩或圆形桩,这两个区别对Decorator是无所谓.我们以插入方形桩为例:
+
+```
+/**
+ *
+ *
+ * @author	HuangYijie
+ * @date	2014年8月6日 下午1:42:34
+ * 
+ */
+public class SquarePeg implements Work {
+
+	@Override
+	public void insert() {
+		System.out.println("方形桩插入");
+	}
+
+}
+
+```
 
 现在有一个应用:需要在桩打入前,挖坑,在打入后,在桩上钉木板,这些额外的功能是动态,可能随意增加调整修改,比如,可能又需要在打桩之后钉架子(只是比喻).
 
 那么我们使用Decorator模式,这里方形桩SquarePeg是decoratee(被刷油漆者),我们需要在decoratee上刷些"油漆",这些油漆就是那些额外的功能.
 
-**Decorator.java**
+```
+/**
+ *
+ *
+ * @author	HuangYijie
+ * @date	2014年8月6日 下午1:42:47
+ * 
+ */
+public class Decorator implements Work{
+	
+	private Work work;
+	
+	// 额外增加的功能被打包在List中
+	private List<String> others = new ArrayList<String>();
+	
+	// 在构造器中使用组合new方式，引入Work对象
+	public Decorator(Work work) {
+		this.work = work;
+		others.add("挖坑");
+		others.add("钉木板");
+	}
+	
+	@Override
+	public void insert() {
+		newMethod();
+	}
+
+	//在新方法中，在insert之前增加其他方法，这里次序先后由用户灵活指定
+	public void newMethod() {
+		otherMethod();
+		work.insert();
+	}
+	
+	public void otherMethod() {
+		ListIterator<String> iterator = others.listIterator();
+		while (iterator.hasNext()) {
+			System.out.println(iterator.next());
+		}
+	}
+	
+}
+```
 
 在上例中,我们把挖坑和钉木板都排在了打桩insert前面,这里只是举例说明额外功能次序可以任意安排.
 
-好了,Decorator模式出来了,我们看如何调用: **Main.java**
+好了,Decorator模式出来了,我们看如何调用: 
+
+```
+/**
+ *
+ *
+ * @author	HuangYijie
+ * @date	2014年8月6日 下午2:21:25
+ * 
+ */
+public class Main {
+
+	public static void main(String[] args) {
+		
+		Work squrePeg = new SquarePeg();
+		Work decorator = new Decorator(squrePeg);
+		decorator.insert();
+		
+	}
+}
+```
 
 Decorator模式至此完成.
 
