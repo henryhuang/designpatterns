@@ -3,7 +3,7 @@
 
 转自 [解道](http://www.jdon.com)
 
-所有的代码都在 [Github](http://henryhuang.github.com)
+所有的代码都在 [Github](https://github.com/henryhuang/designpatterns/tree/master/src/cnhalo/twoa/designpatterns/behavior/observer)
 
 Observer(观察者)模式是比较常用的一个模式,尤其在界面设计中应用广泛,而本站所关注的是Java在电子商务系统中应用,因此想从电子商务实例中分析Observer的应用.
 
